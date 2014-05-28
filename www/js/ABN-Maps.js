@@ -11,12 +11,13 @@ var map = {
     myLocation: null,
     myAccuracy: null,
     DetectionRadius: null,
-    DetectionRadiusSize:null,
+    DetectionRadiusSize: null,
+    currentLocation: { lat: null, lng: null, acc: null },
     Initialize: function () {
-        $("#testmap").width(400).height(400);
+
     },
     Load: function () {
-        this.addMap();        
+        this.addMap();
         this.setDetectionRadius.size(1000);
         if (notMobile) {
             this.Locate(true);
@@ -45,7 +46,7 @@ var map = {
                 anchor: new google.maps.Point(8, 8)
             },
             infoWindow: {
-                content: '<p>Accuracy:<b>'+ acc +'</b></p>'
+                content: '<p>Accuracy:<b>' + acc + '</b></p>'
             }
 
         });
@@ -78,6 +79,7 @@ var map = {
             });
         }
         this.setDetectionRadius(lat, lng)
+        this.currentLocation = { lat: lat, lng: lng, acc: acc };
     },
     addDetectionRadius: function (lat, lng) {
         this.DetectionRadius = this.map.drawCircle({

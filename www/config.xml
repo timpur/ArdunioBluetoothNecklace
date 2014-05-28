@@ -20,6 +20,11 @@
   <gap:plugin name="org.apache.cordova.geolocation" />  
   <gap:plugin name="org.apache.cordova.splashscreen" />
   <gap:plugin name="org.apache.cordova.vibration" />
-  
+
+
+  <access origin="*"/>
+  <!-- allow local pages -->
+  <access origin="http://factotum.com.au" />
+  <access origin="https://maps.googleapis.com" />
   
 </widget>

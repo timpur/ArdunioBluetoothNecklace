@@ -17,16 +17,20 @@ var ABN = {
 };
 var Location = {
     intervalID: -1,
-    setint:function(){
+    setint: function () {
+        this.get(true);
         this.intervalID = setInterval(function () {
             Location.get();
         }, 1000);
     },
-    get: function () {
+    get: function (first) {
         var onSuccess = function (position) {
+            if (first) {
+                map.map.setCenter(position.coords.latitude, position.coords.longitude);
+                map.map.setZoom(15);
+            }
             map.setMyLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
-        };
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        };        
         var onError = function(error) {
             alert('code: ' + error.code + '\n' +
                   'message: ' + error.message + '\n');

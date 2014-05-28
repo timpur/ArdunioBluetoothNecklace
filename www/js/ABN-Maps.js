@@ -16,11 +16,12 @@ var map = {
         $("#testmap").width(400).height(400);
     },
     Load: function () {
-        this.addMap();
-        this.Locate(true);
+        this.addMap();        
         this.setDetectionRadius.size(1000);
-        
-        setInterval(function () { map.Locate(false); }, 1000);
+        if (notMobile) {
+            this.Locate(true);
+            setInterval(function () { map.Locate(false); }, 1000);
+        }
     },
     addMap: function () {
         this.map = new GMaps({
@@ -34,14 +35,19 @@ var map = {
         this.myLocation = this.map.addMarker({
             lat: lat,
             lng: lng,
-            title: "Me -" + acc + "m",
+            title: "Me",
+            animation: google.maps.Animation.DROP,
             icon: {
                 url: 'img/dot.png',
                 size: new google.maps.Size(16, 16),
                 scaledSize: new google.maps.Size(16, 16),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(8, 8)
+            },
+            infoWindow: {
+                content: '<p>Accuracy:<b>'+ acc +'</b></p>'
             }
+
         });
         this.myAccuracy = this.map.drawCircle({
             lat: lat,
@@ -60,8 +66,10 @@ var map = {
         } else {
             this.myLocation.setOptions({
                 lat: lat,
-                lng: lng,
-                title: "Me " + acc + "m"
+                lng: lng
+            });
+            this.myLocation.infoWindow.setOptions({
+                content: '<p>Accuracy:<b>' + acc + '</b></p>'
             });
             this.myAccuracy.setOptions({
                 lat: lat,

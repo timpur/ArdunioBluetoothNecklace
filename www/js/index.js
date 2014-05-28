@@ -5,7 +5,7 @@
 /// <reference path="gmaps.js" />
 /// <reference path="index.js" />
 /// <reference path="jquery.min.js" />
-
+var notMobile = true;
 var app = {
     // Application Constructor
     initialize: function() {
@@ -22,7 +22,8 @@ var app = {
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
+    onDeviceReady: function () {
+        notMobile = false;
         Location.setint();
     }    
 };

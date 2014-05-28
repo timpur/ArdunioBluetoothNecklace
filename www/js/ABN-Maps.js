@@ -65,21 +65,25 @@ var map = {
         if (this.myLocation == null && this.myAccuracy == null) {
             this.addMyLoaction(lat, lng, acc);
         } else {
-            this.myLocation.setOptions({
+            this.myLocation.setPosition({
                 lat: lat,
                 lng: lng
             });
             this.myLocation.infoWindow.setOptions({
                 content: '<p>Accuracy:<b>' + acc + '</b></p>'
             });
-            this.myAccuracy.setOptions({
+            this.myAccuracy.setCenter({
                 lat: lat,
-                lng: lng,
+                lng: lng
+            })
+            this.myAccuracy.setOptions({
                 radius: acc
             });
         }
         this.setDetectionRadius(lat, lng)
-        this.currentLocation = { lat: lat, lng: lng, acc: acc };
+        this.currentLocation.lat = lat;
+        this.currentLocation.lng = lng;
+        this.currentLocation.acc = acc;
     },
     addDetectionRadius: function (lat, lng) {
         this.DetectionRadius = this.map.drawCircle({
@@ -93,7 +97,7 @@ var map = {
         if (this.DetectionRadius == null) {
             this.addDetectionRadius(lat, lng);
         } else {
-            this.DetectionRadius.setOptions({
+            this.DetectionRadius.setCenter({
                 lat: lat,
                 lng: lng
             })

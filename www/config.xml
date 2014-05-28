@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "com.phonegap.example"
+    version     = "1.0.0" >
+
+  <!-- versionCode is optional and Android only -->
+
+  <name>ArduinoBluetoothNecklace</name>
+
+  <description>
+    Connect to your Bluetooth Necklace
+  </description>
+
+  <author href="https://www.factotum.com.au" email="timothy@purchas.com">
+    Timothy Purchas
+  </author>
+  <gap:platform name="android" />
+  
+  <gap:plugin name="org.apache.cordova.geolocation" />  
+  <gap:plugin name="org.apache.cordova.splashscreen" />
+  <gap:plugin name="org.apache.cordova.vibration" />
+  
+  
+</widget>

@@ -4,6 +4,7 @@
 /// <reference path="index.js" />
 /// <reference path="jquery.min.js" />
 /// <reference path="ABN-Maps.js" />
+/// <reference path="ABN-Main.js" />
 
 var map = {
     map: null,

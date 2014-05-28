@@ -16,5 +16,21 @@ var ABN = {
 
 };
 var Location = {
-
+    intervalID: -1,
+    setint:function(){
+        this.intervalID = setInterval(function () {
+            Location.get();
+        }, 1000);
+    },
+    get: function () {
+        var onSuccess = function (position) {
+            map.setMyLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+        };
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        var onError = function(error) {
+            alert('code: ' + error.code + '\n' +
+                  'message: ' + error.message + '\n');
+        }
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }
 };

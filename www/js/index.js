@@ -1,3 +1,10 @@
+/// <reference path="ABN-Main.js" />
+/// <reference path="ABN-Maps.js" />
+/// <reference path="angular.min.js" />
+/// <reference path="bootstrap.min.js" />
+/// <reference path="gmaps.js" />
+/// <reference path="index.js" />
+/// <reference path="jquery.min.js" />
 
 var app = {
     // Application Constructor
@@ -16,6 +23,6 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        
+        Location.setint();
     }    
 };

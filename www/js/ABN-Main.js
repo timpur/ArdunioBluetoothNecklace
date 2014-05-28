@@ -15,26 +15,22 @@ var ABN = {
     }
 
 };
-var Location = {
-    intervalID: -1,
-    setint: function () {
-        this.get(true);
-        this.intervalID = setInterval(function () {
-            Location.get();
-        }, 1000);
-    },
-    get: function (first) {
-        var onSuccess = function (position) {
-            if (first) {
-                map.map.setCenter(position.coords.latitude, position.coords.longitude);
-                map.map.setZoom(15);
-            }
+var Location = {    
+    watchID: -1,
+    first:true,
+    setWatch: function () {
+        if (this.first) {
+            map.map.setCenter(position.coords.latitude, position.coords.longitude);
+            map.map.setZoom(15);
+            this.first = false;
+        }
+        var onSuccess = function (position) {            
             map.setMyLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
         };        
         var onError = function(error) {
             alert('code: ' + error.code + '\n' +
                   'message: ' + error.message + '\n');
         }
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        this.watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
     }
 };

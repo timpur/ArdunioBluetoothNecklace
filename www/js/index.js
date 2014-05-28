@@ -24,6 +24,6 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function () {
         notMobile = false;
-        Location.setint();
+        Location.setWatch();
     }    
 };

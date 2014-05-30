@@ -5,6 +5,9 @@
 /// <reference path="gmaps.js" />
 /// <reference path="index.js" />
 /// <reference path="jquery.min.js" />
+window.onerror = function (errorMsg, url, lineNumber) {
+    return alert('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber);
+}
 
 var ABN = {
     Initialize: function () {

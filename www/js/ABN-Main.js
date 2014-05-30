@@ -114,14 +114,14 @@ var ABN = {
 var Location = {
     watchID: -1,
     first: true,
-    setWatch: function () {
-        if (this.first) {
-            map.map.setCenter(map.currentLocation.lat, map.currentLocation.lng);
-            map.map.setZoom(15);
-            this.first = false;
-        }
+    setWatch: function () {        
         var onSuccess = function (position) {
             map.setMyLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+            if (Location.first) {
+                map.map.setCenter(map.currentLocation.lat, map.currentLocation.lng);
+                map.map.setZoom(15);
+                Location.first = false;
+            }
         };
         var onError = function (error) {
             alert('code: ' + error.code + '\n' +

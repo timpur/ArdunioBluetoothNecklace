@@ -5,8 +5,8 @@
 /// <reference path="gmaps.js" />
 /// <reference path="index.js" />
 /// <reference path="jquery.min.js" />
-var notMobile = false;
-var offline = false;
+var isMobile = false;
+var offline = true;
 var host = "";
 var app = {
     // Application Constructor
@@ -20,7 +20,7 @@ var app = {
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function () {
         if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
-            notMobile = false;
+            isMobile = true;
             document.addEventListener("deviceready", this.onDeviceReady, false);
         } else {
             this.onDeviceReady(); //this is the browser

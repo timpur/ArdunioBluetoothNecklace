@@ -127,7 +127,7 @@ var Location = {
             alert('code: ' + error.code + '\n' +
                   'message: ' + error.message + '\n');
         }
-        this.watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: false });
+        this.watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
     }
 };
 

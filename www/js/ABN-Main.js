@@ -28,7 +28,7 @@ var ABN = {
     },
     app:null,
     angular: function () {
-        this.app = angular.module("ABN", []); //'angularMoment'
+        this.app = angular.module("ABN", ["angularMoment"]); //'angularMoment'
 
         this.app.controller("SignInCTRL", function ($scope) {
             $scope.signin_username = {};

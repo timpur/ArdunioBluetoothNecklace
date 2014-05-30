@@ -22,6 +22,10 @@
   <gap:plugin name="org.apache.cordova.vibration" />
 
 
+  <feature name="http://api.phonegap.com/1.0/geolocation" />
+  <feature name="http://api.phonegap.com/1.0/notification" />
+  
+  
   <access origin="*"/>
   <!-- allow local pages -->
   <access origin="http://factotum.com.au" />

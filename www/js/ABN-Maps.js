@@ -12,17 +12,13 @@ var map = {
     myAccuracy: null,
     DetectionRadius: null,
     DetectionRadiusSize: null,
-    currentLocation: { lat: null, lng: null, acc: null },
+    currentLocation: { lat: -33.8678500, lng: 151.2073200, acc: 100 },
     Initialize: function () {
 
     },
     Load: function () {
         this.addMap();
-        this.setDetectionRadius.size(1000);
-        if (notMobile) {
-            this.Locate(true);
-            setInterval(function () { map.Locate(false); }, 1000);
-        }
+        this.setDetectionRadius.size(1000);        
     },
     addMap: function () {
         this.map = new GMaps({
@@ -102,17 +98,6 @@ var map = {
                 lng: lng
             })
         }
-    },
-    Locate: function (first) {
-        GMaps.geolocate({
-            success: function (position) {
-                if (first) {
-                    map.map.setCenter(position.coords.latitude, position.coords.longitude);
-                    map.map.setZoom(15);
-                }
-                map.setMyLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
-            }
-        });
     }
 };
 map.setDetectionRadius.size = function (rad) {

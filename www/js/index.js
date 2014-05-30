@@ -5,7 +5,9 @@
 /// <reference path="gmaps.js" />
 /// <reference path="index.js" />
 /// <reference path="jquery.min.js" />
-var notMobile = true;
+var notMobile = false;
+var offline = true;
+var host = "";
 var app = {
     // Application Constructor
     initialize: function() {
@@ -24,6 +26,5 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function () {
         notMobile = false;
-        Location.setWatch();
     }    
 };

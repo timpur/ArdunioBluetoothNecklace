@@ -8,14 +8,103 @@
 
 var ABN = {
     Initialize: function () {
-        map.Initialize();
+        this.angular();
+        map.Initialize();       
     },
     Load: function () {
-        btn();
-        map.Load();
+        if (!offline) {
+            $('#LoginModal').modal({
+                keyboard: false,
+                backdrop: "static"
+            })
+        }
+        else {
+            this.signinLoad();
+        }
+        btn();        
     },
+    app:null,
     angular: function () {
+        this.app = angular.module("ABN", ['angularMoment']);
 
+        this.app.controller("SignInCTRL", function ($scope) {
+            $scope.signin_username = {};
+            $scope.signin_password = {};
+            $scope.signin_rememberme = {};
+
+            if (localStorage.getItem("rememberme") == "true") {
+                $scope.signin_username.value = localStorage.getItem("username");
+                $scope.signin_password.value = localStorage.getItem("password");
+                $scope.signin_rememberme.checked = true;
+            }
+            $scope.SignIn = function () {
+                var username = $scope.signin_username.value,
+                    password = $scope.signin_password.value,
+                    remermberme = $scope.signin_rememberme.checked;
+                if (username == undefined || username == "") {
+                    $("#form_group_u").addClass("has-error");
+                    return;
+                }
+                else {
+                    $("#form_group_u").removeClass("has-error");
+                }
+                if (password == undefined || password == "") {
+                    $("#form_group_p").addClass("has-error");
+                    return;
+                }
+                else {
+                    $("#form_group_p").removeClass("has-error");
+                }
+                setTimeout(function () { signIn(username, password); }, 0, [username, password]);
+                if (remermberme) {
+                    localStorage.setItem("username", username);
+                    localStorage.setItem("password", password);
+                    localStorage.setItem("rememberme", true);
+                }
+                else {
+                    localStorage.removeItem("username");
+                    localStorage.removeItem("password");
+                    localStorage.setItem("rememberme", false);
+                }
+            };            
+            if (localStorage.getItem("autosignin") == "true") {
+                $scope.SignIn();
+            }
+            function signIn(username,password) {
+                $.ajax({
+                    async: false,
+                    url: host + "php/auth.php",
+                    type: "POST",
+                    data: JSON.stringify({ username: username, password: password }),
+                    datatype: "json",
+                    contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+                    success: function (data) {
+                        var validated = data.validated;
+                        if (validated) {
+                            ABN.signinLoad();
+                        }
+                        else if(!data) {
+                            SigninMessage("Sign In Error", "The User Name or Password is Incorect");
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        
+                        SigninMessage("Server Error", jqXHR.statusText);
+                    }
+                });
+            }
+            function SigninMessage(hedding, message) {
+                var alertel = $('#signinerror');
+                alertel.find("h4").text(hedding);
+                alertel.find("p").text(message);
+                alertel.addClass('in');
+            };
+        });
+    },
+    signinLoad: function () {
+        map.Load();
+        Location.setWatch();
+        $('#LoginModal').modal('hide');
     }
 
 };
@@ -24,7 +113,7 @@ var Location = {
     first: true,
     setWatch: function () {
         if (this.first) {
-            map.map.setCenter(position.coords.latitude, position.coords.longitude);
+            map.map.setCenter(map.currentLocation.lat, map.currentLocation.lng);
             map.map.setZoom(15);
             this.first = false;
         }
@@ -35,7 +124,7 @@ var Location = {
             alert('code: ' + error.code + '\n' +
                   'message: ' + error.message + '\n');
         }
-        this.watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
+        this.watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: false });
     }
 };
 
@@ -66,5 +155,14 @@ function btn() {
             map.map.setCenter(map.currentLocation.lat, map.currentLocation.lng);
         }
     })
-
+    $('#signinerror').find(".close").click(function () {
+        $('#signinerror').removeClass('in');
+    })
+    if (localStorage.getItem("autosignin") == "true") {
+        $('#AutoSignin').attr("checked", true);
+    }
+    $('#AutoSignin').change(function () {
+        var c = this.checked;
+        localStorage.setItem("autosignin", c);
+    });
 }

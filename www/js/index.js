@@ -6,7 +6,7 @@
 /// <reference path="index.js" />
 /// <reference path="jquery.min.js" />
 var notMobile = false;
-var offline = true;
+var offline = false;
 var host = "";
 var app = {
     // Application Constructor

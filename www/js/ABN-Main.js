@@ -12,7 +12,7 @@ window.onerror = function (errorMsg, url, lineNumber) {
 var ABN = {
     Initialize: function () {
         this.angular();
-        map.Initialize();       
+        map.Initialize();
     },
     Load: function () {
         if (!offline) {
@@ -24,9 +24,10 @@ var ABN = {
         else {
             this.signinLoad();
         }
-        btn();        
+        btn();
     },
-    app:null,
+    me: null,
+    app: null,
     angular: function () {
         this.app = angular.module("ABN", ["angularMoment"]); //'angularMoment'
 
@@ -69,11 +70,11 @@ var ABN = {
                     localStorage.removeItem("password");
                     localStorage.setItem("rememberme", false);
                 }
-            };            
+            };
             if (localStorage.getItem("autosignin") == "true") {
                 $scope.SignIn();
             }
-            function signIn(username,password) {
+            function signIn(username, password) {
                 $.ajax({
                     async: false,
                     url: host + "php/auth.php",
@@ -84,14 +85,23 @@ var ABN = {
                     success: function (data) {
                         var validated = data.validated;
                         if (validated) {
+                            if (!(data.user.selectedfriends == ""))
+                                data.user.selectedfriends = JSON.parse(data.user.selectedfriends);
+                            else
+                                data.user.selectedfriends = [];
+                            ABN.me = data.user;
                             ABN.signinLoad();
+                            ABN.getUsers();
+                            $("#detection").val(ABN.me.detection);
+                            ABN.me.detection = Number(ABN.me.detection);
+                            map.setDetectionRadius.size(ABN.me.detection);
                         }
-                        else if(!data) {
+                        else if (!data) {
                             SigninMessage("Sign In Error", "The User Name or Password is Incorect");
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        
+
                         SigninMessage("Server Error", jqXHR.statusText);
                     }
                 });
@@ -103,18 +113,162 @@ var ABN = {
                 alertel.addClass('in');
             };
         });
+        this.app.controller("NecklaceStatus", function ($scope) {
+            $scope.status = "Disconnected";            
+            $scope.connect = function () {
+                bluetooth.connect();
+            };
+            $scope.disconnect = function () {
+
+            };
+
+        });
+        this.app.controller("FriendsList", function ($scope) {
+            $scope.users = [];
+            $scope.max = 3;
+            $scope.current = 0;
+            $scope.setUsers = function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    item.checked = false;
+                    item.dis = "-1";
+                    for (var ii = 0; ii < ABN.me.selectedfriends.length; ii++) {
+                        if (item.ID == ABN.me.selectedfriends[ii]) {
+                            item.checked = true;
+                            $scope.current++;
+                        }
+                    }
+                }
+                $scope.users = data;
+                $scope.$apply();
+                setTimeout(ABN.getUsersLoc, 1000);
+                setInterval(ABN.getUsersLoc, 10000);
+            };
+            $scope.checked = function (id, indexi) {
+                var index = $.inArray(id, ABN.me.selectedfriends);
+                if (index == -1) {
+                    if (ABN.me.selectedfriends.length < $scope.max) {
+                        ABN.me.selectedfriends.push(id);
+                        ABN.getUsersLoc();
+                        $scope.current++;
+                    } else {
+                        $scope.users[indexi].checked = false;
+                    }
+
+                } else {
+                    ABN.me.selectedfriends.splice(index, 1);
+                    $scope.current--;
+                }
+            };
+            $scope.save = function () {
+                var text = JSON.stringify(ABN.me.selectedfriends);
+                $.ajax({
+                    async: false,
+                    url: host + "php/saveSelection.php",
+                    type: "POST",
+                    data: JSON.stringify({ ID: ABN.me.ID, text: text }),
+                    datatype: "json",
+                    contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+                    success: function (data) {
+
+                    }
+                });
+            };
+        });
     },
     signinLoad: function () {
         map.Load();
         Location.setWatch();
         $('#LoginModal').modal('hide');
+    },
+    users: [],
+    getUsers: function () {
+        $.ajax({
+            async: false,
+            url: host + "php/getUsers.php",
+            type: "POST",
+            data: "",
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+            success: function (data) {
+                for (var i = 0 ; i < data.length; i++) {
+                    if (data[i].ID == ABN.me.ID) {
+                        data.splice(i, 1)
+                        i--;
+                    }
+                }
+                ABN.users = data;
+                angular.element($('[ng-controller="FriendsList"]')).scope().setUsers(ABN.users);
+            }
+        });
+    },
+    getUsersLoc: function () {
+        var f = ABN.me.selectedfriends;
+        for (var i = 0; i < f.length; i++) {
+            var id = f[i];
+            var item = $.grep(ABN.users, function (item) {
+                return item.ID == id;
+            })[0];
+
+            $.ajax({
+                async: false,
+                url: host + "php/getLoc.php",
+                type: "POST",
+                data: JSON.stringify({ ID: item.ID }),
+                datatype: "json",
+                contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+                success: function (data) {
+                    if (!data == false) {
+                        item.lat = data.lat;
+                        item.lng = data.lng;
+                        if (!(google.maps.geometry == undefined)) {
+                            var loc1 = new google.maps.LatLng(map.currentLocation.lat, map.currentLocation.lng);
+                            var loc2 = new google.maps.LatLng(item.lat, item.lng);
+                            var dis = Math.round(google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2) * 100) / 100;
+                            item.dis = dis;
+                            bluetooth.sendDistance(dis, i);
+                        }
+                        angular.element($('[ng-controller="FriendsList"]')).scope().$apply();
+                    }
+                }
+            });
+
+        }
+    },
+    sendLoc: function (lat, lng) {
+        $.ajax({
+            async: false,
+            url: host + "php/addLoc.php",
+            type: "POST",
+            data: JSON.stringify({ ID: this.me.ID, lat: lat, lng: lng }),
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+            success: function (data) {
+
+            }
+        });
+    },
+    saveDetection: function () {
+        var distance = Number($("#detection").val());
+        $.ajax({
+            async: false,
+            url: host + "php/saveDetection.php",
+            type: "POST",
+            data: JSON.stringify({ ID: this.me.ID, distance: distance }),
+            datatype: "json",
+            contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+            success: function (data) {
+                ABN.me.detection = distance;
+                map.setDetectionRadius.size(ABN.me.detection);
+            }
+        });
     }
 
 };
 var Location = {
     watchID: -1,
     first: true,
-    setWatch: function () {        
+    setWatch: function () {
         var onSuccess = function (position) {
             map.setMyLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
             if (Location.first) {
@@ -122,6 +276,7 @@ var Location = {
                 map.map.setZoom(15);
                 Location.first = false;
             }
+            ABN.sendLoc(position.coords.latitude, position.coords.longitude);
         };
         var onError = function (error) {
             alert('code: ' + error.code + '\n' +
@@ -130,7 +285,41 @@ var Location = {
         this.watchID = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
     }
 };
+var bluetooth = {
+    enable: false,
+    connected: false,
+    mac: "00:06:66:66:28:E7",
+    connect: function () {
+        var success = function () {
+            bluetooth.connected = true;
+        }
+        var fail = function () {
+            bluetooth.connected = false;
+        }
+        if (this.enable)
+            bluetoothSerial.connect(this.mac, success, fail);
+    },
+    disconnect: function () {
+        var success = function () {
+            bluetooth.connected = false;
+        }
+        bluetoothSerial.disconnect(success);
+    },
+    sendDistance: function (dis, chanel) {
+        if (this.enable && this.connected) {
+            var val = Math.round(10000 - (((dis - map.currentLocation.acc) / ABN.me.detection) * 10000)) / 100;
+            var data = "{" + chanel.toString() + "," + val.toString() + "}";
+            var success = function () {
 
+            }
+            var fail = function () {
+
+            }
+            bluetoothSerial.write(data, success, fail);
+        }
+    }
+
+};
 
 function btn() {
     $(".nav.navbar-nav a[id*=nav-]").on('click', function (e) {

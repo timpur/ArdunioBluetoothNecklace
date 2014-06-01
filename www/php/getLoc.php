@@ -1,33 +1,15 @@
 <?php 
 date_default_timezone_set("Australia/Sydney");
-class user
+class location
 {
-    var $ID;
-	var $username;
-    var $firstname;
-    var $lastname;
-    var $detection;
-    var $selectedfriends;
-    function user($row,$user)
+    var $lat;
+    var $lng;
+    function location($row)
     {
-    	$this->ID = (int)$row["ID"];
-        $this->username = $user;
-        $this->firstname = $row["firstname"];
-        $this->lastname = $row["lastname"];
-        $this->detection = $row["detection"];
-        $this->selectedfriends = $row["selectedfriends"];
+    	$this->lat = $row["lat"];
+        $this->lng = $row["lng"];
     }
     
-}
-class response
-{
-	var $user;
-    var $validated;
-	function response($user,$val)
-    {
-		$this->user = $user;
-        $this->validated = $val;
-    }
 }
 function free($link)
 {
@@ -39,8 +21,7 @@ function free($link)
     }
 }
 $json = json_decode(file_get_contents('php://input'));
-$user = $json -> username;
-$pass = $json -> password;
+$ID = $json -> ID;
 
 $db = "";
 $u = "";
@@ -66,22 +47,21 @@ $link = mysqli_connect($url,$u,$p,$db,$port);
 if (!$link) {
     die('Could not connect: ' . mysqli_error($link));
 }
-$success = false;
+$success = true;
 $sql = "
-Select ID, firstname, lastname, detection, selectedfriends
-From users
-Where username = '$user' && password = '$pass';
+Select lat, lng
+From location
+Where userID = '$ID';
 ";
 $result = mysqli_query($link,$sql)  or die("Error: ".mysqli_error($link)) or $success = false;
 
-$ruser;
+$loc = false;
 while ($row = mysqli_fetch_array($result))
 {
-	$ruser = new user($row,$user);
-    $success = true;
+	$loc = new location($row);
 }
 if($success){
-    echo json_encode(new response($ruser,true));
+    echo json_encode($loc);
 }
 else echo json_encode(false);
 header('Content-type: application/json');

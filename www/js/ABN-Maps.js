@@ -17,8 +17,7 @@ var map = {
 
     },
     Load: function () {
-        this.addMap();
-        this.setDetectionRadius.size(1000);        
+        this.addMap();      
     },
     addMap: function () {
         this.map = new GMaps({
@@ -102,8 +101,8 @@ var map = {
 };
 map.setDetectionRadius.size = function (rad) {
     map.DetectionRadiusSize = rad;
-    if (!map.DetectionRadius == null)
-        this.DetectionRadius.setOptions({
+    if (!(map.DetectionRadius == null))
+        map.DetectionRadius.setOptions({
             radius: rad
         });
 };

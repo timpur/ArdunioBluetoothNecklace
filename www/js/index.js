@@ -6,7 +6,7 @@
 /// <reference path="index.js" />
 /// <reference path="jquery.min.js" />
 var isMobile = false;
-var offline = true;
+var offline = false;
 var host = "";
 var app = {
     // Application Constructor
@@ -21,9 +21,11 @@ var app = {
     bindEvents: function () {
         if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
             isMobile = true;
+            bluetooth.enable = true;
             document.addEventListener("deviceready", this.onDeviceReady, false);
         } else {
-            this.onDeviceReady(); //this is the browser
+            $(document).ready(this.onDeviceReady);
+            //this.onDeviceReady(); //this is the browser
         }        
     },
     // deviceready Event Handler

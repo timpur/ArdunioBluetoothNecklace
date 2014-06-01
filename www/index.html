@@ -43,6 +43,51 @@
     </nav>
     <div class="tab-content" style="height:100%;">
         <div class="tab-pane active" id="home">
+
+            <div class="container">
+                <div class="row text-center">
+                    <h2>Necklace Dashboard</h2>
+                </div>
+                <div class="row">
+                    <div class="col-xm-12 col-sm-6" ng-controller="NecklaceStatus">
+                        <h4>Necklace Status</h4>
+                        <div>
+                            <label>Status:</label> <span>{{status}}</span>
+                        </div>
+                        <div>
+                            <a class="btn btn-success" ng-click="connect()">Go Online</a>
+                            <a class="btn btn-danger" ng-click="disconnect()">Go Offlien</a>
+                        </div>
+                    </div>
+                    <div class="col-xm-12 col-sm-6" ng-controller="FriendsList">
+                        <h4>React to Friends</h4>
+                        <a class="btn btn-success" ng-click="save()">Save</a>
+                        <br />
+                        <br />
+                        <p>Selection Max: <b>{{max}}</b></p>
+                        <p>Currently Selected: <b>{{current}}</b></p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>Show</td>
+                                    <td>First Name</td>
+                                    <td>Last Name</td>
+                                    <td>Distance</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="user in users">
+                                    <td><input type="checkbox" ng-model="user.checked" ng-click="checked(user.ID, $index)" /></td>
+                                    <td>{{user.firstname}}</td>
+                                    <td>{{user.lastname}}</td>
+                                    <td>{{user.dis}} m</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
         </div>
         <div class="tab-pane" id="map" style="height:100%;">
             <div id="testmap" style="width:100%;height:100%;"></div>
@@ -61,6 +106,14 @@
                 </div>
                 <div>
                     <h4>Necklace Settings</h4>
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="detection" class="">Detection: </label>
+                            <input type="number" class="form-control" id="detection" placeholder="In Meters">
+                        </div>
+                    </div>
+                    <br />
+                    <a class="btn btn-success" onclick="ABN.saveDetection()">Save</a>
                 </div>
             </div>
         </div>
@@ -110,7 +163,7 @@
         </div>
     </div>
     <script type="text/javascript">
-        app.initialize();        
+        app.initialize();
     </script>
 </body>
 </html>

@@ -20,10 +20,12 @@
   <gap:plugin name="org.apache.cordova.geolocation" />  
   <gap:plugin name="org.apache.cordova.splashscreen" />
   <gap:plugin name="org.apache.cordova.vibration" />
+  <gap:plugin name="com.megster.cordova.bluetoothserial"/>
 
 
   <feature name="http://api.phonegap.com/1.0/geolocation" />
   <feature name="http://api.phonegap.com/1.0/notification" />
+  <feature name="http://api.phonegap.com/1.0/device" />
   
   
   <access origin="*"/>

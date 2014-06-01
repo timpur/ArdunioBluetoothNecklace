@@ -28,12 +28,12 @@ $u = "";
 $p = "";
 $url = "";
 $port = "";
-$server = false;
+$server = true;
 if($server){
-	$db = "";
-	$u = "";
-	$p = "";
-	$url = "";
+	$db = "a6773863_abn";
+	$u = "a6773863_root";
+	$p = "abn000";
+	$url = "mysql12.000webhost.com";
 	$port = "";
 }else{
 	$db="ABN";

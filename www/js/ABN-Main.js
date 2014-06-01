@@ -345,8 +345,14 @@ var bluetooth = {
     },
     sendDistance: function (dis, chanel) {
         if (this.enable && this.connected) {
-            var val = Math.round(10000 - (((dis - map.currentLocation.acc) / ABN.me.detection) * 10000)) / 100;
-            var data = "{" + chanel.toString() + "," + val.toString() + "}";
+            var val = 0;
+            if (dis < ABN.me.detection && dis > map.currentLocation.acc  ) {
+                val = Math.round(10000 - (((dis - map.currentLocation.acc) / ABN.me.detection) * 10000)) / 100;
+            }
+            else if (dis < map.currentLocation.acc) {
+                val = 100;
+            }            
+            var data = "{" + chanel.toString() + "," + val.toString() + "};";
             var success = function () {
                 alert("Sent");
             }

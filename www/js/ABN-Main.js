@@ -82,8 +82,13 @@ var ABN = {
                     data: JSON.stringify({ username: username, password: password }),
                     datatype: "json",
                     contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+                    dataFilter: function (jsonString, type) {
+                        jsonString = jsonString.remplace("<!-- Hosting24 Analytics Code -->", "");
+                        jsonString = jsonString.remplace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
+                        jsonString = jsonString.remplace("<!-- End Of Analytics Code -->", "");
+                        return jsonString;
+                    },
                     success: function (data) {
-                        alert(data);
                         var validated = data.validated;
                         if (validated) {
                             if (!(data.user.selectedfriends == ""))

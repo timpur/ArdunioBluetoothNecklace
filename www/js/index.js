@@ -7,7 +7,7 @@
 /// <reference path="jquery.min.js" />
 var isMobile = false;
 var offline = false;
-var host = "";
+var host = "http://arduinonecklace.comlu.com/";
 var app = {
     // Application Constructor
     initialize: function () {

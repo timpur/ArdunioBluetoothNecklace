@@ -83,9 +83,9 @@ var ABN = {
                     datatype: "json",
                     contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
                     dataFilter: function (jsonString, type) {
-                        jsonString = jsonString.remplace("<!-- Hosting24 Analytics Code -->", "");
-                        jsonString = jsonString.remplace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
-                        jsonString = jsonString.remplace("<!-- End Of Analytics Code -->", "");
+                        jsonString = jsonString.replace("<!-- Hosting24 Analytics Code -->", "");
+                        jsonString = jsonString.replace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
+                        jsonString = jsonString.replace("<!-- End Of Analytics Code -->", "");
                         return jsonString;
                     },
                     success: function (data) {

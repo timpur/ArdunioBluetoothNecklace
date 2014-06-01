@@ -175,6 +175,12 @@ var ABN = {
                     data: JSON.stringify({ ID: ABN.me.ID, text: text }),
                     datatype: "json",
                     contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+                    dataFilter: function (jsonString, type) {
+                        jsonString = jsonString.replace("<!-- Hosting24 Analytics Code -->", "");
+                        jsonString = jsonString.replace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
+                        jsonString = jsonString.replace("<!-- End Of Analytics Code -->", "");
+                        return jsonString;
+                    },
                     success: function (data) {
 
                     }
@@ -196,6 +202,12 @@ var ABN = {
             data: "",
             datatype: "json",
             contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+            dataFilter: function (jsonString, type) {
+                jsonString = jsonString.replace("<!-- Hosting24 Analytics Code -->", "");
+                jsonString = jsonString.replace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
+                jsonString = jsonString.replace("<!-- End Of Analytics Code -->", "");
+                return jsonString;
+            },
             success: function (data) {
                 for (var i = 0 ; i < data.length; i++) {
                     if (data[i].ID == ABN.me.ID) {
@@ -223,6 +235,12 @@ var ABN = {
                 data: JSON.stringify({ ID: item.ID }),
                 datatype: "json",
                 contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+                dataFilter: function (jsonString, type) {
+                    jsonString = jsonString.replace("<!-- Hosting24 Analytics Code -->", "");
+                    jsonString = jsonString.replace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
+                    jsonString = jsonString.replace("<!-- End Of Analytics Code -->", "");
+                    return jsonString;
+                },
                 success: function (data) {
                     if (!data == false) {
                         item.lat = data.lat;
@@ -249,6 +267,12 @@ var ABN = {
             data: JSON.stringify({ ID: this.me.ID, lat: lat, lng: lng }),
             datatype: "json",
             contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+            dataFilter: function (jsonString, type) {
+                jsonString = jsonString.replace("<!-- Hosting24 Analytics Code -->", "");
+                jsonString = jsonString.replace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
+                jsonString = jsonString.replace("<!-- End Of Analytics Code -->", "");
+                return jsonString;
+            },
             success: function (data) {
 
             }
@@ -263,6 +287,12 @@ var ABN = {
             data: JSON.stringify({ ID: this.me.ID, distance: distance }),
             datatype: "json",
             contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
+            dataFilter: function (jsonString, type) {
+                jsonString = jsonString.replace("<!-- Hosting24 Analytics Code -->", "");
+                jsonString = jsonString.replace('<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>', "");
+                jsonString = jsonString.replace("<!-- End Of Analytics Code -->", "");
+                return jsonString;
+            },
             success: function (data) {
                 ABN.me.detection = distance;
                 map.setDetectionRadius.size(ABN.me.detection);

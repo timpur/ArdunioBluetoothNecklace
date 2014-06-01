@@ -76,7 +76,7 @@ var ABN = {
             }
             function signIn(username, password) {
                 $.ajax({
-                    async: true,
+                    async: false,
                     url: host + "php/auth.php",
                     type: "POST",
                     data: JSON.stringify({ username: username, password: password }),

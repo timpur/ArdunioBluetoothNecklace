@@ -32,5 +32,6 @@
   <!-- allow local pages -->
   <access origin="http://factotum.com.au" />
   <access origin="https://maps.googleapis.com" />
+  <access origin="http://arduinonecklace.comlu.com/" />
   
 </widget>

@@ -385,11 +385,11 @@ function btn() {
     $('#nav-2').on('shown.bs.tab', function (e) {
         var width = $("#testmap").width();
         var height = $("#testmap").height();
-        if (!(width > 0) && !(height > 0)) {
-            $("#testmap").width("100%").height("100%");
-            map.map.refresh();
+        if (!(width > 0) && !(height > 0)) {            
             map.map.setCenter(map.currentLocation.lat, map.currentLocation.lng);
         }
+        $("#testmap").width("100%").height("100%");
+        map.map.refresh();
     })
     $('#signinerror').find(".close").click(function () {
         $('#signinerror').removeClass('in');

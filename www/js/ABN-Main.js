@@ -328,9 +328,11 @@ var bluetooth = {
     connect: function () {
         var success = function () {
             bluetooth.connected = true;
+            alert("Connected");
         }
         var fail = function () {
             bluetooth.connected = false;
+            alert("Failed");
         }
         if (this.enable)
             bluetoothSerial.connect(this.mac, success, fail);
@@ -346,7 +348,7 @@ var bluetooth = {
             var val = Math.round(10000 - (((dis - map.currentLocation.acc) / ABN.me.detection) * 10000)) / 100;
             var data = "{" + chanel.toString() + "," + val.toString() + "}";
             var success = function () {
-
+                alert("Sent");
             }
             var fail = function () {
 

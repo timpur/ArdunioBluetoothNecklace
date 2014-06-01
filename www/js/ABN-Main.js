@@ -83,6 +83,7 @@ var ABN = {
                     datatype: "json",
                     contentType: "application/json; charset=utf-8",   //x-www-form-urlencoded
                     success: function (data) {
+                        alert(data);
                         var validated = data.validated;
                         if (validated) {
                             if (!(data.user.selectedfriends == ""))

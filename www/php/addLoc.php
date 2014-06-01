@@ -26,7 +26,7 @@ if($server){
 	$u = "a6773863_root";
 	$p = "abn000";
 	$url = "mysql12.000webhost.com";
-	$port = "";
+	$port = "3306";
 }else{
 	$db="ABN";
 	$u = "root";

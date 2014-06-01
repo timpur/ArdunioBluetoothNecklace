@@ -76,7 +76,7 @@ var ABN = {
             }
             function signIn(username, password) {
                 $.ajax({
-                    async: false,
+                    async: true,
                     url: host + "php/auth.php",
                     type: "POST",
                     data: JSON.stringify({ username: username, password: password }),
@@ -169,7 +169,7 @@ var ABN = {
             $scope.save = function () {
                 var text = JSON.stringify(ABN.me.selectedfriends);
                 $.ajax({
-                    async: false,
+                    async: true,
                     url: host + "php/saveSelection.php",
                     type: "POST",
                     data: JSON.stringify({ ID: ABN.me.ID, text: text }),
@@ -196,7 +196,7 @@ var ABN = {
     users: [],
     getUsers: function () {
         $.ajax({
-            async: false,
+            async: true,
             url: host + "php/getUsers.php",
             type: "POST",
             data: "",
@@ -229,7 +229,7 @@ var ABN = {
             })[0];
 
             $.ajax({
-                async: false,
+                async: true,
                 url: host + "php/getLoc.php",
                 type: "POST",
                 data: JSON.stringify({ ID: item.ID }),
@@ -261,7 +261,7 @@ var ABN = {
     },
     sendLoc: function (lat, lng) {
         $.ajax({
-            async: false,
+            async: true,
             url: host + "php/addLoc.php",
             type: "POST",
             data: JSON.stringify({ ID: this.me.ID, lat: lat, lng: lng }),
@@ -281,7 +281,7 @@ var ABN = {
     saveDetection: function () {
         var distance = Number($("#detection").val());
         $.ajax({
-            async: false,
+            async: true,
             url: host + "php/saveDetection.php",
             type: "POST",
             data: JSON.stringify({ ID: this.me.ID, distance: distance }),
